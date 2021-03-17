@@ -1,4 +1,4 @@
-﻿namespace midTerm.Data.Enums
+﻿namespace midTerm4187.Data.Enums
 {
     public enum Gender
     {

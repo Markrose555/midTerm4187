@@ -6,10 +6,12 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\midTerm4187.Data\midTerm4187.Data.csproj" />
+    <ProjectReference Include="..\midTerm4187.Models\midTerm4187.Models.csproj" />
   </ItemGroup>
 
 </Project>

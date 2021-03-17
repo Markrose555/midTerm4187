@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
-using midTerm.Data.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using midTerm4187.Data.Entities;
 
-namespace midTerm.Data
+namespace midTerm4187.Data
 {
     public class midTermDbContext  : DbContext
     {
@@ -24,10 +20,10 @@ namespace midTerm.Data
             modelBuilder.Entity<Question>(question =>
             {
                 question.Property(q => q.Id).IsRequired();
-                question.Property(q => q.Text).IsRequired();
+                question.Property(q => q.Text).HasMaxLength(500).IsRequired();
+                question.Property(q => q.Text).HasMaxLength(1000).IsRequired();
                 question.HasKey(q => q.Id);
                 question.HasMany(q => q.Options);
-                question.Property(q => q.Options).IsRequired();
             });
 
             modelBuilder.Entity<Option>(option =>
@@ -53,6 +49,7 @@ namespace midTerm.Data
                 surveyuser.Property(su => su.FirstName).IsRequired();
                 surveyuser.Property(su => su.Gender).IsRequired();
                 surveyuser.HasKey(su => su.Id);
+
             });
         }
 

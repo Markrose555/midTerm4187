@@ -11,6 +11,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using midTerm4187.Data;
+using midTerm4187.Infrastructure;
+using midTerm4187.Models.Profiles;
+using midTerm4187.Services.Abstractions;
+using midTerm4187.Services.Services;
 
 namespace midTerm4187
 {
@@ -28,6 +35,31 @@ namespace midTerm4187
         {
 
             services.AddControllers();
+            services.AddDbContext<midTermDbContext>((serviceProvider, options) =>
+            {
+                options.UseSqlServer(Configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>().Default,
+                    optionsBuilder =>
+                    {
+                        optionsBuilder.EnableRetryOnFailure();
+                        optionsBuilder.CommandTimeout(60);
+                        optionsBuilder.MigrationsAssembly("midTerm4187.Data");
+                    });
+                options.UseInternalServiceProvider(serviceProvider)
+                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                options.EnableSensitiveDataLogging();
+                options.EnableDetailedErrors();
+            }).AddEntityFrameworkSqlServer();
+
+            var mapper = new MapperConfiguration(cfg =>
+            {
+                cfg.AddMaps(typeof(QuestionProfile));
+            }).CreateMapper();
+
+            services.AddSingleton(mapper);
+
+            services.AddTransient<IQuestionService, QuestionService>();
+            services.AddTransient<IOptionService, OptionService>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "midTerm4187", Version = "v1" });
